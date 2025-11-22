@@ -15,17 +15,30 @@ public class Parser
         _reader = new StreamReader(_settings.FullPath);
         
         string[] tablesFile = MyRegEx.TablesFile(_reader.ReadLine()!, _settings.Separator);
-        foreach (string tableNeed in _settings.Rows.Split(' '))
+
+        if (_settings.Rows != "*")
         {
-            for (int i = 0; i < tablesFile.Length; i++)
+            
+            foreach (string tableNeed in _settings.Rows.Split(' '))
             {
-                if (tableNeed.ToLower() == tablesFile[i].ToLower())
+                for (int i = 0; i < tablesFile.Length; i++)
                 {
-                    _settings.TablesNeedNums.Add(i);
+                    if (tableNeed.ToLower() == tablesFile[i].ToLower())
+                    {
+                        _settings.TablesNeedNums.Add(i);
+                    }
                 }
             }
         }
 
+        else
+        {
+            for (int i = 0; i < tablesFile.Length; i++)
+            {
+                _settings.TablesNeedNums.Add(i);
+            }
+        }
+        
         if (_settings.TablesNeedNums.Count == 0)
         {
             throw new Exception("неверно введены столбцы, попробуйте еще раз");
@@ -50,7 +63,8 @@ public class Parser
     // private SettingsPars DebugSettings()
     // {
     //     // return new SettingsPars("C:\\Users\\dimai\\RiderProjects\\Practic6\\Practic6\\testFiles","contractors.csv",[2, 10],"Id Name");
-    //     return new SettingsPars("C:\\Users\\dimai\\RiderProjects\\Practic6\\Practic6\\testFiles","employees.tsv",[-1, 0],"id Name salary");
+    //     // return new SettingsPars("C:\\Users\\dimai\\RiderProjects\\Practic6\\Practic6\\testFiles","employees.tsv",[-1, 0],"id Name salary");
+    //     return new SettingsPars("C:\\Users\\dimai\\RiderProjects\\Practic6\\Practic6\\testFiles","employees.tsv",[-1, 0],"*");
     //     
     // }
 
@@ -170,7 +184,7 @@ public class Parser
             Console.WriteLine("неверный формат ввода");
         }
 
-        Console.Write("нужные столбцы (названия): ");
+        Console.Write("нужные столбцы (названия столбцов или \"*\" для всех столбцов): ");
         rows = Console.ReadLine()!;
         Console.Clear();
         return new SettingsPars(folder, file, pagination, rows);
