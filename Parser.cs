@@ -1,17 +1,29 @@
-﻿
+﻿namespace Practic6;
 
-namespace Practic6;
+
+public record SettingsPars(string FolderPath, string Name, int[] Pagination, string Rows)
+{
+    public string FolderPath { get; } = FolderPath;
+    public string Name { get; } = Name;
+    public string Rows { get; } = Rows;
+    public int[] Pagination { get; } = Pagination;
+    
+    public string FullPath { get; } = FolderPath + "\\" + Name;
+    public List<int> TablesNeedNums { get; } = new();
+    public char Separator { get; } = Name.Split('.').Last() == "csv" ? ';' : '\t';
+}
+
+
 
 public class Parser
 {
     private readonly SettingsPars _settings;
     private readonly StreamReader _reader;
-    private readonly List<string[]> _parsedStrings = new List<string[]>();
+    private readonly List<string[]> _parsedStrings = new();
     
     public Parser()
     {
         _settings = Input();
-        // _settings = DebugSettings();
         _reader = new StreamReader(_settings.FullPath);
         
         string[] tablesFile = MyRegEx.TablesFile(_reader.ReadLine()!, _settings.Separator);
@@ -60,14 +72,6 @@ public class Parser
         Pars();
     }
 
-    // private SettingsPars DebugSettings()
-    // {
-    //     // return new SettingsPars("C:\\Users\\dimai\\RiderProjects\\Practic6\\Practic6\\testFiles","contractors.csv",[2, 10],"Id Name");
-    //     // return new SettingsPars("C:\\Users\\dimai\\RiderProjects\\Practic6\\Practic6\\testFiles","employees.tsv",[-1, 0],"id Name salary");
-    //     return new SettingsPars("C:\\Users\\dimai\\RiderProjects\\Practic6\\Practic6\\testFiles","employees.tsv",[-1, 0],"*");
-    //     
-    // }
-
     private void Pars()
     {
         string line;
@@ -92,39 +96,12 @@ public class Parser
             numLine++;
         }
 
-        DrawTable();
+        Output.DrawTable(_settings.TablesNeedNums.Count, _parsedStrings);
     }
 
-    void DrawTable()
-    {
-        int[] rowsSizes = new int[_settings.TablesNeedNums.Count];
-
-        foreach (string[] str in _parsedStrings)
-        {
-            for (int i = 0; i < str.Length; i++)
-            {
-                rowsSizes[i] = Math.Max(str[i].Length, rowsSizes[i]);
-            }
-        }
-        int sumSizes = rowsSizes.Sum() + _settings.TablesNeedNums.Count + 1;
-        
-        Console.WriteLine("-".Repeat(sumSizes));
-        foreach (string[] str in _parsedStrings)
-        {
-            Console.Write("|");
-            for (int i = 0; i < str.Length; i++)
-            {
-                Console.Write(str[i] + " ".Repeat(rowsSizes[i] - str[i].Length) + '|');
-            }
-            Console.WriteLine('\n' + "-".Repeat(sumSizes));
-        }
-
-        Console.ReadLine();
-    }
-    
     private SettingsPars Input()
     {
-        string folder = "", file = "", rows = "";
+        string folder, file, rows;
         int[] pagination = [];
 
         while (true)
