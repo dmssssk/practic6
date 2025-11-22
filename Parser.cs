@@ -1,6 +1,5 @@
 ﻿namespace Practic6;
 
-
 public record SettingsParser(string FolderPath, string Name, int[] Pagination, string Rows)
 {
     public string FolderPath { get; } = FolderPath;
