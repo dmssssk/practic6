@@ -12,7 +12,12 @@ public static class Program
         //     Console.WriteLine(s);
         // }
 
-
+        //TODO добавить *
+        
+        // List<string> rows = new List<string>();
+        
+        // Console.WriteLine(rows.Count);
+        
 
 
     }

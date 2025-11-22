@@ -24,8 +24,8 @@ class SettingsPars(string folder, string name, int[] pagination, string rows)
     public string Rows { get; } = rows;
     public string Extension { get;  } = name.Split('.').Last();
     public string FullPath { get;  } = folder + "\\" + name;
-    public List<int> TablesNeedNums = new List<int>();
-    public char Separator = name.Split('.').Last() == "csv" ? ';' : '\t';
+    public List<int> TablesNeedNums { get; } = new List<int>();
+    public char Separator { get; } = name.Split('.').Last() == "csv" ? ';' : '\t';
 }
 
 
@@ -38,7 +38,6 @@ public static class MyOverrides
         {
             a += str;
         }
-
         return a;
     }
 }
