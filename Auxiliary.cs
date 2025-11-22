@@ -27,3 +27,18 @@ class SettingsPars(string folder, string name, int[] pagination, string rows)
     public List<int> TablesNeedNums = new List<int>();
     public char Separator = name.Split('.').Last() == "csv" ? ';' : '\t';
 }
+
+
+public static class MyOverrides
+{
+    public static string Repeat(this string str, int count)
+    {
+        string a = "";
+        for (int i = 0; i < count; i++)
+        {
+            a += str;
+        }
+
+        return a;
+    }
+}

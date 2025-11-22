@@ -8,7 +8,6 @@ public class Parser
     private readonly StreamReader _reader;
     private List<string[]> _parsedStrings = new List<string[]>();
     
-
     public Parser()
     {
         // _settings = Input();
@@ -46,10 +45,9 @@ public class Parser
     private SettingsPars DebugSettings()
     {
         // return new SettingsPars("C:\\Users\\dimai\\RiderProjects\\Practic6\\Practic6\\testFiles","contractors.csv",[2, 10],"Id Name");
-        return new SettingsPars("C:\\Users\\dimai\\RiderProjects\\Practic6\\Practic6\\testFiles","employees.tsv",[2, 10],"Id Name");
+        return new SettingsPars("C:\\Users\\dimai\\RiderProjects\\Practic6\\Practic6\\testFiles","employees.tsv",[2, 10],"id Name salary");
         
     }
-
 
     private void Pars()
     {
@@ -67,11 +65,9 @@ public class Parser
                 string[] sLine = line.Split(_settings.Separator);
                 for (int i = 0; i < sLine.Length; i++)
                 {
-                    // Console.WriteLine($"{_settings.TablesNeedNums[0]} {_settings.TablesNeedNums[1]} {i}");
                     if (_settings.TablesNeedNums.Contains(i))
                     {
                         toAdd += sLine[i] + '|';
-                        // Console.WriteLine(sLine[i]);
                     }
                 }
                 toAdd = toAdd.Trim();
@@ -83,15 +79,36 @@ public class Parser
             numLine++;
         }
 
-        foreach (string[] strings in _parsedStrings)
+        DrawTable();
+    }
+
+    void DrawTable()
+    {
+        int[] rowsSizes = new int[_settings.TablesNeedNums.Count];
+
+        foreach (string[] str in _parsedStrings)
         {
-            foreach (string s in strings)
+            for (int i = 0; i < str.Length; i++)
             {
-                Console.Write(s + " | ");
+                rowsSizes[i] = Math.Max(str[i].Length, rowsSizes[i]);
             }
-            Console.WriteLine();
         }
+        int sumSizes = rowsSizes.Sum() + _settings.TablesNeedNums.Count + 1;
         
+        Console.WriteLine($"SIZES: {rowsSizes[0]} {rowsSizes[1]}");
+
+        Console.WriteLine("-".Repeat(sumSizes));
+        foreach (string[] str in _parsedStrings)
+        {
+            Console.Write("|");
+            for (int i = 0; i < str.Length; i++)
+            {
+                Console.Write(str[i] + " ".Repeat(rowsSizes[i] - str[i].Length) + '|');
+            }
+            Console.WriteLine('\n' + "-".Repeat(sumSizes));
+
+        }
+
         Console.ReadLine();
     }
     
