@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 
 
-public static class MyRegEx
+public static class ParserRegExs
 {
     public static string Pagination(string pag)
     {
